@@ -37,8 +37,8 @@ defmodule Shat.Chat do
   """
   def get_room!(id), do: Repo.get!(Room, id)
 
-  def get_room_by_name!(room_name) do
-    Repo.get_by!(Room, name: room_name)
+  def get_room_by_name(room_name) do
+    Repo.get_by(Room, name: room_name)
   end
 
   @doc """

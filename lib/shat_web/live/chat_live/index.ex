@@ -18,6 +18,15 @@ defmodule ShatWeb.ChatLive.Index do
   end
 
   def handle_event("enter_room", %{"room_name" => room_name}, socket) do
-    {:noreply, push_navigate(socket, to: "/chat/#{room_name}")}
+    case Chat.get_room_by_name(room_name) do
+      nil ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Código de sala inválido")
+         |> push_navigate(to: "/")}
+
+      _room ->
+        {:noreply, push_navigate(socket, to: "/chat/#{room_name}")}
+    end
   end
 end
