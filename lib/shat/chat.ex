@@ -123,9 +123,12 @@ defmodule Shat.Chat do
     Repo.all(Message)
   end
 
-  def last_ten_messages_for(room_id) do
+  def last_messages(room_id) do
     Repo.all(
-      from m in Message, where: m.room_id == ^room_id, order_by: [desc: m.inserted_at], limit: 10
+      from m in Message,
+        where: m.room_id == ^room_id,
+        order_by: [asc: m.inserted_at],
+        preload: [:user]
     )
   end
 
