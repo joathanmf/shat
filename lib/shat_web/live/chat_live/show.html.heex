@@ -1,9 +1,9 @@
 <div
-  class="flex flex-col h-[calc(100vh-100px)] p-5 mt-5 bg-white rounded-lg shadow"
+  class="flex flex-col h-[calc(100vh-100px)] px-4 mt-5 bg-white rounded-lg shadow"
   id="chat-container"
 >
   <!-- Cabeçalho do Chat -->
-  <div class="text-black px-6 text-center">
+  <div class="text-black p-2 text-center">
     <h1 class="text-2xl font-bold">Código da Sala: {@room.name}</h1>
   </div>
   
@@ -30,35 +30,37 @@
         </div>
         <p class={
           if message.user.id == @user.id,
-            do: "p-3 rounded shadow-md bg-blue-200 text-blue-900",
-            else: "p-3 rounded shadow-md bg-gray-200 text-gray-800"
+            do: "p-2 rounded-lg shadow-md bg-blue-200 text-blue-900",
+            else: "p-2 rounded-lg shadow-md bg-gray-200 text-gray-800"
         }>
           {message.content}
         </p>
       </div>
     </div>
   </div>
-  
-<!-- Formulário de Envio -->
-  <form phx-submit="send_message" class="flex items-center gap-4">
-    <input
-      name="content"
-      placeholder="Digite sua mensagem..."
-      autocomplete="off"
-      class="flex-1 px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-200 focus:border-blue-500 text-gray-800 resize-none overflow-y-auto"
-    />
-    <button
-      type="submit"
-      class="w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        class="size-6"
+
+  <div class="py-4">
+    <!-- Formulário de Envio -->
+    <form phx-submit="send_message" class="flex items-center gap-4">
+      <input
+        name="content"
+        placeholder="Digite sua mensagem..."
+        autocomplete="off"
+        class="flex-1 px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-200 focus:border-blue-500 text-gray-800 resize-none overflow-y-auto"
+      />
+      <button
+        type="submit"
+        class="w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300"
       >
-        <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
-      </svg>
-    </button>
-  </form>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-6"
+        >
+          <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+        </svg>
+      </button>
+    </form>
+  </div>
 </div>

@@ -14,5 +14,6 @@ defmodule Shat.Users.User do
     user
     |> cast(attrs, [:name])
     |> validate_required([:name])
+    |> validate_length(:name, min: 1, max: 20)
   end
 end
