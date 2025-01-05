@@ -1,0 +1,52 @@
+<div class="space-y-8">
+  <!-- Título -->
+  <h1 class="text-center text-3xl font-bold text-gray-800">Bem-vindo ao Chat</h1>
+  
+<!-- Formulário para Criar Sala -->
+  <div class="bg-white rounded-lg shadow-lg p-6 max-w-lg mx-auto">
+    <form phx-submit="create_room" class="space-y-6">
+      <!-- Botão Criar Sala -->
+      <button
+        type="submit"
+        class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      >
+        Criar Sala
+      </button>
+    </form>
+  </div>
+  
+<!-- Formulário para Entrar na Sala -->
+  <div class="bg-white rounded-lg shadow-lg p-6 max-w-lg mx-auto">
+    <form phx-submit="enter_room" class="space-y-6">
+      <!-- Nome da Sala -->
+      <div>
+        <label for="room_name_enter" class="block text-sm font-medium text-gray-700">
+          Código da Sala
+        </label>
+        <input
+          type="text"
+          id="room_name_enter"
+          name="room_name"
+          placeholder="Digite o nome da sala"
+          required
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
+        />
+      </div>
+      
+<!-- Botão Entrar na Sala -->
+      <button
+        type="submit"
+        class="w-full px-4 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+      >
+        Entrar na Sala
+      </button>
+    </form>
+  </div>
+  
+<!-- Mensagem de Erro -->
+  <%= if @error do %>
+    <div class="mt-4 text-center text-red-600 font-medium">
+      {@error}
+    </div>
+  <% end %>
+</div>

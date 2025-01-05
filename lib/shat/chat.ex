@@ -37,6 +37,10 @@ defmodule Shat.Chat do
   """
   def get_room!(id), do: Repo.get!(Room, id)
 
+  def get_room_by_name!(room_name) do
+    Repo.get_by!(Room, name: room_name)
+  end
+
   @doc """
   Creates a room.
 
@@ -49,9 +53,11 @@ defmodule Shat.Chat do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_room(attrs \\ %{}) do
+  def create_room do
+    room_name = :crypto.strong_rand_bytes(4) |> Base.encode16() |> String.downcase()
+
     %Room{}
-    |> Room.changeset(attrs)
+    |> Room.changeset(%{name: room_name})
     |> Repo.insert()
   end
 
@@ -115,6 +121,12 @@ defmodule Shat.Chat do
   """
   def list_messages do
     Repo.all(Message)
+  end
+
+  def last_ten_messages_for(room_id) do
+    Repo.all(
+      from m in Message, where: m.room_id == ^room_id, order_by: [desc: m.inserted_at], limit: 10
+    )
   end
 
   @doc """
@@ -196,5 +208,9 @@ defmodule Shat.Chat do
   """
   def change_message(%Message{} = message, attrs \\ %{}) do
     Message.changeset(message, attrs)
+  end
+
+  def preload_message_user(message) do
+    Repo.preload(message, :user)
   end
 end

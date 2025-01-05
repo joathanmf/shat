@@ -17,7 +17,11 @@ defmodule ShatWeb.Router do
   scope "/", ShatWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", ChatLive.Index, :index
+    live "/chat/:room_name", ChatLive.Show, :show
+    live "/chat/:room_name/set_name", ChatLive.SetName, :set_name
+
+    get "/set_user", ChatController, :set_user
   end
 
   # Other scopes may use custom stacks.
