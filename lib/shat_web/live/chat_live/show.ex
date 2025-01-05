@@ -3,17 +3,21 @@ defmodule ShatWeb.ChatLive.Show do
   alias Shat.{Chat, Users, Repo}
 
   def mount(%{"room_name" => room_name}, session, socket) do
+    session = Map.merge(session, %{teste: "teste"})
+
     room = Chat.get_room_by_name!(room_name)
     messages = Chat.last_messages(room.id)
 
     user_id = Map.get(session, "user_id")
+
+    IO.inspect(user_id)
 
     case user_id do
       nil ->
         {:ok, push_navigate(socket, to: "/chat/#{room_name}/set_name")}
 
       _ ->
-        case Users.get_user!(user_id) do
+        case Users.get_user(user_id) do
           nil ->
             {:ok, push_navigate(socket, to: "/chat/#{room_name}/set_name")}
 
