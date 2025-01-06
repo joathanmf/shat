@@ -42,22 +42,26 @@ defmodule ShatWeb.ChatLive.Show do
         room_id: socket.assigns.room.id
       }
 
-      {:ok, new_message} = Chat.create_message(message_params)
+      case Chat.create_message(message_params) do
+        {:ok, new_message} ->
+          new_message = Repo.preload(new_message, :user)
 
-      new_message = Repo.preload(new_message, :user)
+          ShatWeb.Endpoint.broadcast("room_#{socket.assigns.room.name}", "new_message", %{
+            message: %{
+              id: new_message.id,
+              content: new_message.content,
+              user: %{
+                id: new_message.user.id,
+                name: new_message.user.name
+              }
+            }
+          })
 
-      ShatWeb.Endpoint.broadcast("room_#{socket.assigns.room.name}", "new_message", %{
-        message: %{
-          id: new_message.id,
-          content: new_message.content,
-          user: %{
-            id: new_message.user.id,
-            name: new_message.user.name
-          }
-        }
-      })
+          {:noreply, stream_insert(socket, :messages, new_message)}
 
-      {:noreply, stream_insert(socket, :messages, new_message)}
+        {:error, _changeset} ->
+          {:noreply, put_flash(socket, :error, "Erro ao enviar a mensagem.")}
+      end
     else
       {:noreply, socket}
     end

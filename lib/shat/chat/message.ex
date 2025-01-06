@@ -15,5 +15,6 @@ defmodule Shat.Chat.Message do
     message
     |> cast(attrs, [:content, :room_id, :user_id])
     |> validate_required([:content, :room_id, :user_id])
+    |> validate_length(:content, min: 1, max: 1024)
   end
 end
