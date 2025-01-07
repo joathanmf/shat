@@ -10,6 +10,11 @@ defmodule ShatWeb.ChatLive.Show do
 
     user_id = Map.get(session, "user_id")
 
+    messages =
+      Enum.map(messages, fn message ->
+        %{message | inserted_at: Time.to_iso8601(message.inserted_at)}
+      end)
+
     case user_id do
       nil ->
         {:ok, push_navigate(socket, to: "/chat/#{room_name}/set_name")}
@@ -50,6 +55,7 @@ defmodule ShatWeb.ChatLive.Show do
             message: %{
               id: new_message.id,
               content: new_message.content,
+              inserted_at: Time.to_iso8601(new_message.inserted_at),
               user: %{
                 id: new_message.user.id,
                 name: new_message.user.name
