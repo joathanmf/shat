@@ -7,13 +7,9 @@ defmodule Shat.ChatFixtures do
   @doc """
   Generate a room.
   """
-  def room_fixture(attrs \\ %{}) do
+  def room_fixture(_attrs \\ %{}) do
     {:ok, room} =
-      attrs
-      |> Enum.into(%{
-        name: "some name"
-      })
-      |> Shat.Chat.create_room()
+      Shat.Chat.create_room()
 
     room
   end
