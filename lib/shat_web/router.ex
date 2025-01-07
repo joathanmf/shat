@@ -17,11 +17,17 @@ defmodule ShatWeb.Router do
   scope "/", ShatWeb do
     pipe_through :browser
 
-    live "/", ChatLive.Index, :index
+    # live "/", ChatLive.Index, :index
     live "/chat/:room_name", ChatLive.Show, :show
     live "/chat/:room_name/set_name", ChatLive.SetName, :set_name
 
-    get "/set_user", ChatController, :set_user
+    # Novas rotas
+    get "/", ChatController, :index
+
+    get "/chat/:room_name/set", ChatController, :set_user
+
+    get "/chat", ChatController, :enter
+    post "/chat", ChatController, :create
   end
 
   # Other scopes may use custom stacks.
