@@ -15,7 +15,7 @@ defmodule ShatWeb.ChatController do
   def create(conn, _params) do
     case Chat.create_room() do
       {:ok, room} ->
-        render(conn, :set_user, room: room)
+        redirect_user_to(conn, room.name)
 
       {:error, _changeset} ->
         conn
@@ -24,27 +24,32 @@ defmodule ShatWeb.ChatController do
     end
   end
 
-  # def set_user(conn, params) do
-  #   conn
-  #   |> put_session(:user_id, user_id)
-  #   |> redirect(to: "/chat/#{room_name}")
-  # end
-
-  defp user_in_session(conn) do
-    user_id = get_session(conn, :user_id)
-
-    case user_id do
+  def enter(conn, %{"room_name" => room_name}) do
+    case Chat.get_room_by_name(room_name) do
       nil ->
-        false
+        conn
+        |> put_flash(:error, "Código de chat inválido.")
+        |> redirect(to: "/")
 
-      _ ->
-        case Users.get_user(user_id) do
-          nil ->
-            false
+      room ->
+        redirect_user_to(conn, room.name)
+    end
+  end
 
-          _user ->
-            true
-        end
+  defp fetch_user_from_session(conn) do
+    case get_session(conn, :user_id) do
+      nil -> nil
+      user_id -> Users.get_user(user_id)
+    end
+  end
+
+  defp redirect_user_to(conn, room_name) do
+    case fetch_user_from_session(conn) do
+      nil ->
+        redirect(conn, to: "/chat/#{room_name}/user/new")
+
+      _user ->
+        redirect(conn, to: "/chat/#{room_name}")
     end
   end
 end

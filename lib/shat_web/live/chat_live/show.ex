@@ -3,38 +3,39 @@ defmodule ShatWeb.ChatLive.Show do
   alias Shat.{Chat, Users, Repo}
 
   def mount(%{"room_name" => room_name}, session, socket) do
-    session = Map.merge(session, %{teste: "teste"})
-
-    room = Chat.get_room_by_name(room_name)
-    messages = Chat.last_messages(room.id)
-
-    user_id = Map.get(session, "user_id")
-
-    messages =
-      Enum.map(messages, fn message ->
-        %{message | inserted_at: Time.to_iso8601(message.inserted_at)}
-      end)
-
-    case user_id do
+    case Chat.get_room_by_name(room_name) do
       nil ->
-        {:ok, push_navigate(socket, to: "/chat/#{room_name}/set_name")}
+        {:ok,
+         socket
+         |> put_flash(:error, "Código de chat inválido.")
+         |> push_navigate(to: "/")}
 
-      _ ->
-        case Users.get_user(user_id) do
+      room ->
+        case Map.get(session, "user_id") do
           nil ->
-            {:ok, push_navigate(socket, to: "/chat/#{room_name}/set_name")}
+            {:ok, push_navigate(socket, to: "/chat/#{room_name}/user/new")}
 
-          user ->
-            socket =
-              socket
-              |> assign(room: room, user: user)
-              |> stream(:messages, messages)
+          user_id ->
+            case Users.get_user(user_id) do
+              nil ->
+                {:ok, push_navigate(socket, to: "/chat/#{room_name}/user/new")}
 
-            if connected?(socket) do
-              ShatWeb.Endpoint.subscribe("room_#{room.name}")
+              user ->
+                messages =
+                  Chat.last_messages(room.id)
+                  |> Enum.map(&%{&1 | inserted_at: Time.to_iso8601(&1.inserted_at)})
+
+                socket =
+                  socket
+                  |> assign(room: room, user: user)
+                  |> stream(:messages, messages)
+
+                if connected?(socket) do
+                  ShatWeb.Endpoint.subscribe("room_#{room.name}")
+                end
+
+                {:ok, socket}
             end
-
-            {:ok, socket}
         end
     end
   end
