@@ -1,4 +1,5 @@
-<div class="flex flex-col h-[calc(100vh-95px)] bg-gray-700 mt-20 rounded-lg dark:bg-gray-800">
+<div class="flex flex-col h-[calc(100svh-4.5rem)] sm:h-[calc(100svh-5rem)] mt-[4.5rem]
+sm:rounded-lg bg-white dark:bg-gray-800 shadow">
   <!-- Cabeçalho do Chat -->
   <div class="text-center pt-4">
     <h1 class="text-2xl text-gray-800 dark:text-white">
@@ -34,7 +35,7 @@
               do:
                 "leading-1.5 px-3 py-2 bg-blue-600 text-white rounded-l-xl rounded-tr-xl max-w-[70%] w-fit justify-center ml-auto",
               else:
-                "leading-1.5 px-3 py-2 bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl dark:bg-gray-700 dark:text-white max-w-[70%] w-fit"
+                "leading-1.5 px-3 py-2 bg-gray-200 dark:bg-gray-600 text-gray-900 rounded-e-xl rounded-es-xl dark:bg-gray-700 dark:text-white max-w-[70%] w-fit"
           }>
             <p class="text-sm font-normal break-words">
               {message.content}
@@ -45,14 +46,15 @@
     </div>
   </div>
   <!-- Formulário de Envio -->
-  <div class="p-4 bg-gray-800 rounded-b-lg dark:bg-gray-700">
+  <div class="p-4 bg-gray-100 sm:rounded-b-lg dark:bg-gray-700">
     <form phx-submit="send_message" class="flex items-center gap-4">
       <input
         name="content"
         placeholder="Digite sua mensagem (até 1024 caracteres)"
         autocomplete="off"
-        class="flex-1 px-4 py-3 border border-gray-700 rounded-lg shadow-sm bg-gray-700 text-white
-        placeholder-gray-500 focus:outline-none focus:ring focus:border-blue-500 resize-none dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+        class="flex-1 px-4 py-3 border border-gray-300 dark:border-none rounded-lg shadow-sm bg-white text-black
+        placeholder-gray-500 focus:outline-none focus:ring focus:border-blue-500 resize-none
+        dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
       />
       <button
         type="submit"
@@ -72,28 +74,3 @@
     </form>
   </div>
 </div>
-<script>
-  const audio = new Audio('../sounds/notification.mp3');
-  const chatContainer = document.getElementById('messages');
-  const scrollDownChat = () => {
-    chatContainer.scrollTop = chatContainer.scrollHeight
-  }
-
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'childList') {
-        // Verifica se novos nós foram adicionados
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === Node.ELEMENT_NODE && node.id.startsWith('messages-')) {
-            // Exibe o alerta quando encontrar o elemento com o ID desejado
-            scrollDownChat()
-            audio.play().catch((err) => {return;});
-          }
-        });
-      }
-    }
-  });
-
-  scrollDownChat()
-  observer.observe(chatContainer, { childList: true });
-</script>
