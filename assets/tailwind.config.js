@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = {
-  darkMode: "class",
+  // darkMode: "class",
   content: ["./js/**/*.js", "../lib/shat_web.ex", "../lib/shat_web/**/*.*ex"],
   theme: {
     extend: {

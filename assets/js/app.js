@@ -46,6 +46,8 @@ window.addEventListener("phx:update", function () {
   });
 });
 
+document.documentElement.classList.add("dark");
+
 // connect if there are any LiveViews on the page
 liveSocket.connect();
 
